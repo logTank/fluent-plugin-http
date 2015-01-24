@@ -6,8 +6,8 @@ Gem::Specification.new do |gem|
 
   gem.authors       = ["Peter Grman"]
   gem.email         = ["peter.grman@gmail.com"]
-  gem.description   = "enhanced input plugin for HTTP"
   gem.summary       = "enhanced input plugin for HTTP"
+  gem.description   = "enhanced input plugin for HTTP based on fluentd's HTTP plugin in core"
   gem.homepage      = "https://github.com/logtank/fluent-plugin-http"
 
   gem.files         = `git ls-files`.split($\)
@@ -15,6 +15,8 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
   gem.has_rdoc      = false
+
+  gem.license = "Apache License 2.0"
 
   gem.required_ruby_version = '>= 2.1'
 
