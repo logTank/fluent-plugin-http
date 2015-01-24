@@ -275,6 +275,26 @@ class LogtankHttpInputTest < Test::Unit::TestCase
     end
   end
 
+  def test_if_access_control_allow_origin_is_initialized_properly
+    # This test is to check if Fluent::LogtankHttpInput::Handler
+    # sets the Access-Control-Allow-Origin header to '*'.
+
+    d = create_driver
+
+    time = Time.parse("2011-01-02 13:14:15 UTC").to_i
+
+    d.expect_emit "tag1", time, {"a"=>1}
+    d.expect_emit "tag2", time, {"a"=>2}
+
+    d.run do
+      d.expected_emits.each {|tag,time,record|
+        res = post("/#{tag}", {"json"=>record.to_json, "time"=>time.to_s})
+        assert_equal "200", res.code
+        assert_equal '*', res['Access-Control-Allow-Origin']
+      }
+    end
+  end
+
   def post(path, params, header = {})
     http = Net::HTTP.new("127.0.0.1", PORT)
     req = Net::HTTP::Post.new(path, header)

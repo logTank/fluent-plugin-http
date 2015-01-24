@@ -152,7 +152,7 @@ module Fluent
             mes.add(single_time, single_record)
           end
           router.emit_stream(tag, mes)
-    else
+        else
           router.emit(tag, time, record)
         end
       rescue
@@ -347,6 +347,7 @@ module Fluent
       def send_response(code, header, body)
         header['Content-length'] ||= body.bytesize
         header['Content-type'] ||= 'text/plain'
+        header['Access-Control-Allow-Origin'] ||= '*'
 
         data = %[HTTP/1.1 #{code}\r\n]
         header.each_pair {|k,v|
