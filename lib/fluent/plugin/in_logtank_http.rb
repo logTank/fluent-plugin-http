@@ -351,6 +351,8 @@ module Fluent
         header['Content-length'] ||= body.bytesize
         header['Content-type'] ||= 'text/plain'
         header['Access-Control-Allow-Origin'] ||= '*'
+        header['Access-Control-Allow-Methods'] ||= '*'
+        header['Access-Control-Allow-Headers'] ||= '*'
 
         data = %[HTTP/1.1 #{code}\r\n]
         header.each_pair {|k,v|

@@ -291,6 +291,8 @@ class LogtankHttpInputTest < Test::Unit::TestCase
         res = post("/#{tag}", {"json"=>record.to_json, "time"=>time.to_s})
         assert_equal "200", res.code
         assert_equal '*', res['Access-Control-Allow-Origin']
+        assert_equal '*', res['Access-Control-Allow-Methods']
+        assert_equal '*', res['Access-Control-Allow-Headers']
       }
     end
   end
@@ -306,6 +308,8 @@ class LogtankHttpInputTest < Test::Unit::TestCase
       res = options("/tag1")
       assert_equal "200", res.code
       assert_equal '*', res['Access-Control-Allow-Origin']
+      assert_equal '*', res['Access-Control-Allow-Methods']
+      assert_equal '*', res['Access-Control-Allow-Headers']
     end
   end
 

@@ -6,3 +6,8 @@
 # 0.0.2
 
 - Respond to HTTP-OPTIONS with headers
+
+# 0.0.3
+
+- Add `Access-Control-Allow-Methods: *` to the HTTP respone header
+- Add `Access-Control-Allow-Headers: *` to the HTTP respone header
