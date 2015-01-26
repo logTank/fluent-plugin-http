@@ -295,6 +295,20 @@ class LogtankHttpInputTest < Test::Unit::TestCase
     end
   end
 
+  def test_if_http_options_is_answered_properly
+    # When a browser is sending data, it first sends HTTP Options
+    # to see if it's allowed to send data via POST, this should only
+    # return the headers and not throw any exceptions
+
+    d = create_driver
+
+    d.run do
+      res = options("/tag1")
+      assert_equal "200", res.code
+      assert_equal '*', res['Access-Control-Allow-Origin']
+    end
+  end
+
   def post(path, params, header = {})
     http = Net::HTTP.new("127.0.0.1", PORT)
     req = Net::HTTP::Post.new(path, header)
@@ -304,6 +318,11 @@ class LogtankHttpInputTest < Test::Unit::TestCase
       req.set_form_data(params)
     end
     http.request(req)
+  end
+
+  def options(path, header = {})
+    http = Net::HTTP.new("127.0.0.1", PORT)
+    http.options(path, header)
   end
 
   def include_http_header?(record)

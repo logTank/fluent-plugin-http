@@ -234,6 +234,7 @@ module Fluent
       end
 
       def on_headers_complete(headers)
+
         expect = nil
         size = nil
 
@@ -273,6 +274,8 @@ module Fluent
           else
             send_response_and_close("417 Expectation Failed", {}, "")
           end
+        elsif @parser.http_method.upcase == 'OPTIONS'
+          send_response_and_close("200 OK", {}, "")
         end
       end
 
