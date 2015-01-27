@@ -262,6 +262,10 @@ module Fluent
             end
           when /Origin/i
             @origin  = v
+          when /Access-Control-Request-Method/i
+            @requestMethod = v
+          when /Access-Control-Request-Headers/i
+            @requestHeaders = v
           end
         }
         if expect
@@ -351,8 +355,8 @@ module Fluent
         header['Content-length'] ||= body.bytesize
         header['Content-type'] ||= 'text/plain'
         header['Access-Control-Allow-Origin'] ||= '*'
-        header['Access-Control-Allow-Methods'] ||= '*'
-        header['Access-Control-Allow-Headers'] ||= '*'
+        (header['Access-Control-Allow-Methods'] ||= @requestMethod) if @requestMethod
+        (header['Access-Control-Allow-Headers'] ||= @requestHeaders) if @requestHeaders
 
         data = %[HTTP/1.1 #{code}\r\n]
         header.each_pair {|k,v|

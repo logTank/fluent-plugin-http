@@ -11,3 +11,8 @@
 
 - Add `Access-Control-Allow-Methods: *` to the HTTP respone header
 - Add `Access-Control-Allow-Headers: *` to the HTTP respone header
+
+# 0.0.4
+
+- Change `Access-Control-Allow-Methods` to return the same value as in `Access-Control-Request-Method`
+- Change `Access-Control-Allow-Headers` to return the same value as in `Access-Control-Request-Headers`

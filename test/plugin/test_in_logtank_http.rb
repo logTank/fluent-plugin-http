@@ -275,9 +275,11 @@ class LogtankHttpInputTest < Test::Unit::TestCase
     end
   end
 
-  def test_if_access_control_allow_origin_is_initialized_properly
+  def test_if_access_control_headers_are_initialized_properly
     # This test is to check if Fluent::LogtankHttpInput::Handler
-    # sets the Access-Control-Allow-Origin header to '*'.
+    # sets the Access-Control-Allow-Origin header to '*' and
+    # Allow-Methods, Allow-Headers - headers to the values in
+    # ..-Request-Method, and Request-Headers
 
     d = create_driver
 
@@ -288,10 +290,17 @@ class LogtankHttpInputTest < Test::Unit::TestCase
 
     d.run do
       d.expected_emits.each {|tag,time,record|
-        res = post("/#{tag}", {"json"=>record.to_json, "time"=>time.to_s})
+        res = post("/#{tag}", {
+            "json"=>record.to_json,
+            "time"=>time.to_s
+          },
+          {
+            "Access-Control-Request-Method" => "POST",
+            "Access-Control-Request-Headers" => "*"
+          })
         assert_equal "200", res.code
         assert_equal '*', res['Access-Control-Allow-Origin']
-        assert_equal '*', res['Access-Control-Allow-Methods']
+        assert_equal 'POST', res['Access-Control-Allow-Methods']
         assert_equal '*', res['Access-Control-Allow-Headers']
       }
     end
@@ -305,11 +314,23 @@ class LogtankHttpInputTest < Test::Unit::TestCase
     d = create_driver
 
     d.run do
-      res = options("/tag1")
+      res = options("/tag1", {
+          "Access-Control-Request-Method" => "POST",
+          "Access-Control-Request-Headers" => "content-type"
+        })
       assert_equal "200", res.code
       assert_equal '*', res['Access-Control-Allow-Origin']
-      assert_equal '*', res['Access-Control-Allow-Methods']
-      assert_equal '*', res['Access-Control-Allow-Headers']
+      assert_equal 'POST', res['Access-Control-Allow-Methods']
+      assert_equal 'content-type', res['Access-Control-Allow-Headers']
+
+      res = options("/tag1", {
+          "Access-Control-Request-Method" => "GET",
+          "Access-Control-Request-Headers" => "accept, content-type"
+        })
+      assert_equal "200", res.code
+      assert_equal '*', res['Access-Control-Allow-Origin']
+      assert_equal 'GET', res['Access-Control-Allow-Methods']
+      assert_equal 'accept, content-type', res['Access-Control-Allow-Headers']
     end
   end
 
