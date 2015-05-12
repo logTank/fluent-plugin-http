@@ -29,22 +29,26 @@ class LogtankHttpInputTest < Test::Unit::TestCase
     assert_equal false, d.instance.add_http_headers
   end
 
-  def test_time
-    d = create_driver
+  # TODO: this plugin doesn't use Engine.now because it isn't precise enough.
+  #       Change back to Engine.now and uncomment this test, when
+  #       https://github.com/fluent/fluentd/commit/c9be93cfc5c6905e7b18720709e6c8d835859941
+  #       will be merged or https://github.com/fluent/fluentd/issues/461 resolved
+  # def test_time
+  #   d = create_driver
 
-    time = Time.parse("2011-01-02 13:14:15 UTC").to_i
-    Fluent::Engine.now = time
+  #   time = Time.parse("2011-01-02 13:14:15 UTC").to_i
+  #   Fluent::Engine.now = time
 
-    d.expect_emit "tag1", time, {"a"=>1}
-    d.expect_emit "tag2", time, {"a"=>2}
+  #   d.expect_emit "tag1", time, {"a"=>1}
+  #   d.expect_emit "tag2", time, {"a"=>2}
 
-    d.run do
-      d.expected_emits.each {|tag,time,record|
-        res = post("/#{tag}", {"json"=>record.to_json})
-        assert_equal "200", res.code
-      }
-    end
-  end
+  #   d.run do
+  #     d.expected_emits.each {|tag,time,record|
+  #       res = post("/#{tag}", {"json"=>record.to_json})
+  #       assert_equal "200", res.code
+  #     }
+  #   end
+  # end
 
   def test_json
     d = create_driver

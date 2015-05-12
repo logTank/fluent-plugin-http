@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |gem|
   gem.name          = "fluent-plugin-logtank-http"
-  gem.version       = '0.0.4'
+  gem.version       = '0.0.5'
 
   gem.authors       = ["Peter Grman"]
   gem.email         = ["peter.grman@gmail.com"]

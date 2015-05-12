@@ -134,9 +134,13 @@ module Fluent
 
         time = if param_time = params['time']
                  param_time = param_time.to_i
-                 param_time.zero? ? Engine.now : param_time
+                 # Engine.now has only second-precision, use Time.now.to_f to get millisecond precision
+                 # param_time.zero? ? Engine.now : param_time
+                 param_time.zero? ? Time.now.to_f : param_time
                else
-                 record_time.nil? ? Engine.now : record_time
+                 # Engine.now has only second-precision, use Time.now.to_f to get millisecond precision
+                 # record_time.nil? ? Engine.now : record_time
+                 record_time.nil? ? Time.now.to_f : record_time
                end
       rescue
         return ["400 Bad Request", {'Content-type'=>'text/plain'}, "400 Bad Request\n#{$!}\n"]
